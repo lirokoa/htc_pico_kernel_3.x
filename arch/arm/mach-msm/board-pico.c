@@ -80,10 +80,10 @@
 #include <mach/perflock.h>
 #endif
 
-#ifdef CONFIG_MSM_RESERVE_PMEM
+
 #define PMEM_KERNEL_EBI1_SIZE	0x3A000
 #define MSM_PMEM_AUDIO_SIZE	0x5B000
-#endif
+
 #define BAHAMA_SLAVE_ID_FM_ADDR         0x2A
 #define BAHAMA_SLAVE_ID_QMEMBIST_ADDR   0x7B
 #define FM_GPIO	83
@@ -598,10 +598,6 @@ static struct i2c_board_info i2c_CM3628_devices[] = {
 
 static struct android_pmem_platform_data android_pmem_adsp_pdata = {
 	.name = "pmem_adsp",
-#ifndef CONFIG_MSM_RESERVE_PMEM
-	.start = MSM_PMEM_ADSP_BASE,
-	.size = MSM_PMEM_ADSP_SIZE,
-#endif
 	.allocator_type = PMEM_ALLOCATORTYPE_BITMAP,
 	.cached = 1,
 	.memory_type = MEMTYPE_EBI1,
@@ -613,7 +609,6 @@ static struct platform_device android_pmem_adsp_device = {
 	.dev = { .platform_data = &android_pmem_adsp_pdata },
 };
 
-#ifdef CONFIG_MSM_RESERVE_PMEM
 static unsigned pmem_mdp_size = MSM_PMEM_MDP_SIZE;
 static int __init pmem_mdp_size_setup(char *p)
 {
@@ -631,9 +626,6 @@ static int __init pmem_adsp_size_setup(char *p)
 }
 
 early_param("pmem_adsp_size", pmem_adsp_size_setup);
-#endif
-
-
 
 #define SND(desc, num) { .name = #desc, .id = num }
 static struct snd_endpoint snd_endpoints_list[] = {
@@ -790,10 +782,6 @@ static struct platform_device msm_device_adspdec = {
 
 static struct android_pmem_platform_data android_pmem_pdata = {
 	.name = "pmem",
-#ifndef CONFIG_MSM_RESERVE_PMEM
-	.start = MSM_PMEM_MDP_BASE,
-	.size = MSM_PMEM_MDP_SIZE,
-#endif
 	.allocator_type = PMEM_ALLOCATORTYPE_BITMAP,
 	.cached = 1,
 	.memory_type = MEMTYPE_EBI1,
@@ -1278,8 +1266,6 @@ static struct platform_device *pico_devices[] __initdata = {
 	&pm8029_leds,
 };
 
-#ifdef CONFIG_MSM_RESERVE_PMEM
-
 static unsigned pmem_kernel_ebi1_size = PMEM_KERNEL_EBI1_SIZE;
 static int __init pmem_kernel_ebi1_size_setup(char *p)
 {
@@ -1327,7 +1313,7 @@ static void __init reserve_pmem_memory(void)
 	reserve_memory_for(&android_pmem_adsp_pdata);
 	reserve_memory_for(&android_pmem_pdata);
 	reserve_memory_for(&android_pmem_audio_pdata);
-	msm7x27a_reserve_table[MEMTYPE_EBI1].size += pmem_kernel_ebi1_size
+	msm7x27a_reserve_table[MEMTYPE_EBI1].size += pmem_kernel_ebi1_size;
 #endif
 }
 
@@ -1353,7 +1339,7 @@ static void __init msm7x27a_reserve(void)
 	reserve_info = &msm7x27a_reserve_info;
 	msm_reserve();
 }
-#endif
+
 
 static void __init msm_device_i2c_init(void)
 {
@@ -2022,9 +2008,7 @@ MACHINE_START(PICO, "pico")
 	.boot_params	= PHYS_OFFSET + 0x100,
 	.fixup = pico_fixup,
 	.map_io		= msm_common_io_init,
-#ifdef CONFIG_MSM_RESERVE_PMEM
 	.reserve	= msm7x27a_reserve,
-#endif
 	.init_irq	= msm_init_irq,
 	.init_machine	= pico_init,
 	.timer		= &msm_timer,
