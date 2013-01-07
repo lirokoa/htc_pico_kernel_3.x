@@ -215,10 +215,8 @@ static struct msm_i2c_platform_data msm_gsbi1_qup_i2c_pdata = {
 };
 
 #ifdef CONFIG_ARCH_MSM7X27A
-#ifdef CONFIG_MSM_RESERVE_PMEM
 #define MSM_PMEM_MDP_SIZE       0x1DD1000
 #define MSM_PMEM_ADSP_SIZE      0x1000000
-#endif
 #endif
 
 #ifdef CONFIG_USB_EHCI_MSM_72K
