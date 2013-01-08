@@ -1891,8 +1891,8 @@ static void __init pico_init(void)
 	msm7x2x_misc_init();
 
 	printk(KERN_INFO "pico_init() revision = 0x%x\n", system_rev);
-	printk(KERN_INFO "MSM_PMEM_MDP_BASE=0x%x MSM_PMEM_ADSP_BASE=0x%x MSM_RAM_CONSOLE_BASE=0x%x MSM_FB_BASE=0x%x\n",
-		MSM_PMEM_MDP_BASE, MSM_PMEM_ADSP_BASE, MSM_RAM_CONSOLE_BASE, MSM_FB_BASE);
+	/*printk(KERN_INFO "MSM_PMEM_MDP_BASE=0x%x MSM_PMEM_ADSP_BASE=0x%x MSM_RAM_CONSOLE_BASE=0x%x MSM_FB_BASE=0x%x\n",
+		MSM_PMEM_MDP_BASE, MSM_PMEM_ADSP_BASE, MSM_RAM_CONSOLE_BASE, MSM_FB_BASE);*/
 	/* Must set msm_hw_reset_hook before first proc comm */
 	msm_hw_reset_hook = pico_reset;
 
